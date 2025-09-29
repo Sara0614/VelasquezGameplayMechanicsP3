@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6706938930475206562}
   - component: {fileID: 1675589696486538176}
   m_Layer: 0
-  m_Name: PowerUp
+  m_Name: PowerupRockets
   m_TagString: PowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,4 +121,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e117f355f1ed1b48aae52f3f9859f0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  powerUpType: 1
+  powerUpType: 2

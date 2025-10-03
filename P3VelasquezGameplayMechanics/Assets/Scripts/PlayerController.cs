@@ -109,7 +109,7 @@ enemyRigidbody.AddForce(awayFromPlayer * powerUpStrength, ForceMode.Impulse);
         while(Time.time < jumpTime)
         {
             //move the player up while still keeping their x velocity.
-            playerRb.angularVelocity = new Vector2(playerRb.velocity.x, smashSpeed);
+            playerRb.angularVelocity = new Vector2(playerRb.linearVelocity.x, smashSpeed);
             yield return null;
         }
 

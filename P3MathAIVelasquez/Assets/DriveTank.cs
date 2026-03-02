@@ -9,13 +9,54 @@ public class DriveTank : MonoBehaviour
     public float speed = 10.0f;
     public float rotationSpeed = 100.0f;
     public GameObject fuel;
+    bool autopiot = false;
+    float tspeed = 2f;
+    float rspeed = 0.2f;
 
     void Start()
     {
 
     }
 
-    void CalculateDistance()
+    void AutoPilot()
+    {
+        CalculateAngle();
+        this.transform.position += this.transform.up * tspeed * Time.deltaTime;
+    }
+
+
+void CalculateAngle()
+    {
+        Vector3 tankForward = transform.up;
+        Vector3 fuelDirection = fuel.transform.position - transform.position;
+
+        Debug.DrawRay(this.transform.position, tankForward * 10, Color.green, 5);
+        Debug.DrawRay(this.transform.position, fuelDirection, Color.red, 5);
+
+        float dot = tankForward.x * fuelDirection.x + tankForward.y * fuelDirection.y;
+        float angle = Mathf.Acos(dot / (tankForward.magnitude * fuelDirection.magnitude));
+
+        int clockwise = 1;
+        if(Cross(tankForward, fuelDirection).z < 0)
+            clockwise = -1;
+
+        if((angle * Mathf.Rad2Deg) > 10)
+                this.transform.Rotate(0, 0, angle * Mathf.Rad2Deg * clockwise * rspeed);
+
+        this.transform.Rotate(0,0, angle * Mathf.Rad2Deg * clockwise * rspeed);
+
+    }
+
+    Vector3 Cross(Vector3 v, Vector3 w)
+    {
+        float xMult = v.y * w.z - v.z * w.y;
+        float yMult = v.x * w.y - v.y * w.x;
+        float zMult = v.x * w.y - v.y * w.x;
+
+        return(new Vector3(xMult, yMult, zMult));
+    }
+
+    float CalculateDistance()
     {
         float distance = Mathf.Sqrt(Mathf.Pow(fuel.transform.position.x - transform.position.x, 2) + Mathf.Pow(fuel.transform.position.z - transform.position.z, 2));
 
@@ -30,6 +71,8 @@ public class DriveTank : MonoBehaviour
         Debug.Log(" U Distance:" + uDistance);
         Debug.Log("V Magnitude:" + tankToFuel.magnitude);
         Debug.Log("V SqMagnitude:" + tankToFuel.sqrMagnitude);
+
+        return distance;
     }
 
 
@@ -54,6 +97,21 @@ public class DriveTank : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             CalculateDistance();
+            CalculateAngle();
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            autopiot = !autopiot;
+        }
+
+        if (CalculateDistance() < 3)
+            autopiot = false;
+
+
+        if(autopiot)
+        {
+            AutoPilot();
         }
 
     }
